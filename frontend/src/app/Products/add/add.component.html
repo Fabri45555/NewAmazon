@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md4 mx-auto">
+      <form (ngSubmit)="create()" (ngSubmit)="send()"  [formGroup]="form"  #f="ngForm" novalidate action="">
+        <div div class="form-group">
+          <img class="add_logo" src="https://www.bitrefill.com/content/cn/b_rgb%3AFFFFFF%2Cc_pad%2Ch_720%2Cw_1280/v1569493391/amazon_it.jpg" >
+          <label style="display: flex; flex-direction:column;" for="nomeProdotto">Nome</label>
+          <input type="text" class="form-control" formControlName="nome">
+          <label style="display: flex; flex-direction:column;" for="descrizioneProdotto">Descrizione</label>
+          <input type="text" class="form-control" formControlName="descrizione" >
+          <label style="display: flex; flex-direction:column;" for="prezzoProdotto">Prezzo</label>
+          <input type="text" class="form-control" formControlName="prezzo">
+          <label style="display: flex; flex-direction:column;" for="prezzoProdotto">Quantità</label>
+          <input type="text" class="form-control" formControlName="quantita">
+          <label style="display: flex; flex-direction:column;" for="immagineProdotto">Immagine Prodotto</label>
+          <input type="text" class="form-control" formControlName="imageUrl">
+          <label style="display: flex; flex-direction:column;" for="ratingsProdotto">Valutazione</label>
+          <input type="text" class="form-control" formControlName="ratings" >
+          <div class="button1">
+          <button type="submit" class="btn1" [disabled]="!f.valid">
+          Crea</button>
+          </div>
+          <div class="button2">
+          <a type="button" class="btn2" (click)="back()">
+           << Torna indietro</a>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

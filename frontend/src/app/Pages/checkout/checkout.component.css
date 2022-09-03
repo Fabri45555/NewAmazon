@@ -1,0 +1,27 @@
+.checkout{
+  background: none;
+  display: flex;
+  width: 100%;
+}
+.checkout_left{
+  flex: 1;
+}
+.checkout_empty{
+  margin: 20px 20px 400px 20px;
+}
+.checkout_right{
+  justify-content: flex-end;
+  margin-left: 20px;
+}
+.checkout_not_empty{
+  margin-top: 5px;
+}
+.empty{
+  margin-left: 74%;
+  margin-bottom: -10px;
+  border: 1px solid;
+  padding: 3px;
+  background-color: #f0c14b;
+  border-color: #a88134 #9c7e31 #846a29;
+  border-radius: 2px;
+}

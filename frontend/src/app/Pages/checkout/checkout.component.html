@@ -1,0 +1,20 @@
+<div class="checkout">
+
+  <div class="checkout_left">
+    <div class="checkout_empty" *ngIf="shopping_cart.getCartLength() == 0">
+      <h2>Il tuo carrello Amazon è vuoto.</h2>
+      <p>Non è presente nessun prodotto nel carrello</p>
+    </div>
+
+    <div class="checkout_not_empty" *ngIf="shopping_cart.getCartLength() != 0">
+      <p><strong>Carrello</strong>
+      <button class="empty" (click)="decrAll()" (click)="removeAll()"><strong>Svuota carrello</strong></button></p>
+      <app-checkout-products [checkout_products] = "items" (deleteEvent)="deleteEventHandler($event)"></app-checkout-products>
+    </div>
+  </div>
+
+  <div class="checkout_right">
+    <app-checkout-subtotal></app-checkout-subtotal>
+  </div>
+
+</div>

@@ -1,0 +1,45 @@
+.container{
+  margin-top: 80px;
+  text-align: center;
+}
+
+input{
+  width: 200px;
+  border-radius: 3px;
+  border: 2px solid;
+  border-color: #a88134 #9c7e31 #846a29;
+}
+label{
+  margin-top: 18px;
+  font-size: 18px;
+}
+
+.button1{
+  margin-top: 20px;
+
+}
+
+.add_logo{
+  object-fit: contain;
+  width: 120px;
+}
+
+.btn1{
+  color: black;
+  background-color: #f0c14b;
+  border: 1px solid;
+  border-color: #a88134 #9c7e31 #846a29;
+  border-radius: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.button2{
+  padding-bottom:100% ;
+  margin-right: 100px;
+  padding-top: 15px;
+}
+
+.btn2{
+  color: black;
+}
