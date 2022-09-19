@@ -16,7 +16,9 @@
       </div>
       <div class="checkout_quantity">
       <p class="disponibility"  >Quantità prodotto disponibile: <strong>{{productService.getQuantity(p)}}</strong></p>
-        <p style="margin-top: 50px;font-size: 16px!important;line-height: 1.5!important;">Quantità:<input type="number" class="quantity_box" min="1" max="{{productService.getQuantity(p)}}" value="{{this.shopping_cart_service.getQuantity(p)}}"></p>
+        <label style="margin-top: 50px;font-size: 16px!important;line-height: 1.5!important;">Quantità:<button class="button_plus" (click)="this.shopping_cart_service.addProduct(p)" *ngIf="this.shopping_cart_service.getQuantity(p)<=this.productService.getQuantity(p)">+</button>
+          <label style="margin-top: 50px;font-size: 16px!important;line-height: 1.5!important; font-weight: 800;">{{this.shopping_cart_service.getQuantity(p)}}</label>
+        <button class="button_menus" (click)="quantita(p)">-</button></label>
       </div>
     </div>
 

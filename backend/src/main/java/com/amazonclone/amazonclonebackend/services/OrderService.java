@@ -9,12 +9,12 @@ import com.amazonclone.amazonclonebackend.exception.QuantityProductUnavailableEx
 import com.amazonclone.amazonclonebackend.repositories.OrderRepository;
 import com.amazonclone.amazonclonebackend.repositories.ProductInOrdinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,21 +33,25 @@ public class OrderService {
     @Transactional
     public Ordination addOrder(Ordination ordination) throws QuantityProductUnavailableException {
         Ordination result = orderRepository.save(ordination);
-        for ( ProductInOrdination pio : result.getProductsInOrdination() ) {
-            pio.setOrdination(result);
-            ProductInOrdination justAdded = productInOrdinationRepository.save(pio);
-            entityManager.refresh(justAdded);
-            Product product = justAdded.getProduct();
-            int newQuantity = product.getQuantity() - pio.getQuantity();
-            if ( newQuantity < 0 ) {
-                throw new QuantityProductUnavailableException();
+        if(result.getProductsInOrdination()!=null) {
+            for (ProductInOrdination pio : result.getProductsInOrdination()) {
+                pio.setOrdination(result);
+                ProductInOrdination justAdded = productInOrdinationRepository.save(pio);
+            //    entityManager.refresh(justAdded);
+                Product product = justAdded.getProduct();
+                int newQuantity = product.getQuantity() - pio.getQuantity();
+                if (newQuantity < 0) {
+                    throw new QuantityProductUnavailableException();
+                }
+                product.setQuantity(newQuantity);
+              //  entityManager.refresh(pio);
+
             }
-            product.setQuantity(newQuantity);
-            entityManager.refresh(pio);
         }
-        entityManager.refresh(result);
+     //   entityManager.refresh(result);
         return result;
     }
+
 
     public List<Ordination> findAllOrder(){
         return  orderRepository.findAll();

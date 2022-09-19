@@ -17,6 +17,22 @@
   padding-left: 20px;
   width: 100%;
 }
+.button_plus{
+  margin-left: 4px;
+  margin-right: 4px;
+  border: 2px solid;
+  border-radius: 3px;
+  border-color: #a88134 #9c7e31 #846a29;
+  background-color: lightgrey;
+}
+.button_menus{
+  margin-left: 4px;
+  width: 3%;
+  border: 2px solid;
+  border-radius: 3px;
+  border-color: #a88134 #9c7e31 #846a29;
+  background-color: lightgrey;
+}
 .checkout_product_title{
   color:#0066c0;
   font-size: 17px !important;

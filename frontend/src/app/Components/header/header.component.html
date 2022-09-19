@@ -13,6 +13,7 @@
     </div>
     <div class="header_menu_signin">
       <span (click) ="logout()" class="header_menu_top_item" *ngIf="loginService.getIsLogged()" >Ciao, {{loginService.getUsername()}}</span>
+      <!--<span  (click) ="login()" class="header_menu_top_item" *ngIf="!loginService.getIsLogged()">Ciao, Accedi</span>-->
       <span  (click) ="login()" class="header_menu_top_item" *ngIf="!loginService.getIsLogged()">Ciao, Accedi</span>
       <span class="header_menu_bottom_item">
         <span *ngIf="!loginService.getIsLogged()">Account e liste</span>

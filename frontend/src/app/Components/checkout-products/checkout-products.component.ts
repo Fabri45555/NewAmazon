@@ -1,8 +1,10 @@
+import { Product } from './../products/product';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from 'src/app/SERVICES/product.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ShoppingCartService } from 'src/app/SERVICES/shopping-cart.service';
-import { Product } from '../products/product';
+
 
 @Component({
   selector: 'app-checkout-products',
@@ -16,7 +18,8 @@ export class CheckoutProductsComponent implements OnInit {
   @Output()
   deleteEvent: EventEmitter<any> = new EventEmitter()
 
-  constructor(public shopping_cart_service: ShoppingCartService, public productService : ProductService) { }
+  constructor(public shopping_cart_service: ShoppingCartService, public productService : ProductService) {
+  }
 
   ngOnInit(): void {
     console.log('products ', this.checkout_products)
@@ -27,6 +30,13 @@ export class CheckoutProductsComponent implements OnInit {
     this.deleteEvent.emit(p)
   }
 
-
+  quantita(p:Product):void{
+    let quantita = this.shopping_cart_service.getQuantity(p);
+    if(quantita>1){
+      this.shopping_cart_service.decrQuantity(p);
+    }else{
+      this.removeItem(p);
+    }
+  }
 
 }

@@ -5,7 +5,8 @@
       <p><strong>{{product.price}}</strong> €</p>
       <img src={{product.imageUrl}}>
       <div class="update_delete">
-      <button class="add" (click)="addToCart(product)" (click)="this.shopping_cart.addQuantity(product)" (click)="alert()">Aggiungi al carrello</button>
+      <button class="add" (click)="checkQuantity(product)">Aggiungi al carrello</button>
+      <!--<button class="add" *ngIf="this.shopping_cart.getQuantity(product)>=this.productService.getQuantity(product)">Aggiungi al carrello</button>-->
         <button *ngIf="loginService.getIsLogged() && loginService.getIsAdmin()" (click)="storageProducts(product)" (click)="back()" (click)="onDelete(product)" mat-fab style="background-color: red; "color="black">
           <mat-icon>delete</mat-icon>
         </button>

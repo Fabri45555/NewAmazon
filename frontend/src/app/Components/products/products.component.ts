@@ -21,7 +21,7 @@ export class ProductsComponent implements OnInit {
   deleteEvent: EventEmitter<any> = new EventEmitter();
 
 
-  constructor(public shopping_cart: ShoppingCartService,private router:Router, private productService: ProductService,public activateRoute: ActivatedRoute, public loginService:LoginService) {
+  constructor(public shopping_cart: ShoppingCartService,private router:Router, public productService: ProductService,public activateRoute: ActivatedRoute, public loginService:LoginService) {
   }
 
   ngOnInit(): void {
@@ -83,6 +83,25 @@ export class ProductsComponent implements OnInit {
   alert(){
     Swal.fire('Prodotto aggiunto correttamente al carrello','','success')
    }
+
+   alert2(){
+    Swal.fire('Limite prodotto superato!','','error');
+   }
+
+   checkQuantity(p:Product) : void{
+    let qProd = this.productService.getQuantity(p);
+    let qCart = this.shopping_cart.getQuantity(p)
+    if(qCart < qProd)
+    {
+      this.addToCart(p);
+      this.alert()
+    }
+    else{
+      this.alert2();
+    }
+   }
+
+   
 
 }
 

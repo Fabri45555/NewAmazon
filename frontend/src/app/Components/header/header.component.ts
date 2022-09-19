@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 
 import { LoginService } from './../../SERVICES/login.service';
 import { LoginComponent } from './../../Pages/login/login.component';
@@ -5,6 +6,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ShoppingCartService } from 'src/app/SERVICES/shopping-cart.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import Swal from 'sweetalert2';
+
+
 
 
 
@@ -21,7 +24,7 @@ export class HeaderComponent implements OnInit {
 
 
 
-  constructor(public shoppingCart: ShoppingCartService, public loginService: LoginService,public loginComponent:LoginComponent ) {}
+  constructor(public shoppingCart: ShoppingCartService, public loginService: LoginService,public loginComponent:LoginComponent,private router:Router ) {}
   //public altrimenti non è possibile accedervi nell'html
 
   menu() : any{
@@ -46,6 +49,7 @@ export class HeaderComponent implements OnInit {
   }
 
 
+  }
 
 
-}
+

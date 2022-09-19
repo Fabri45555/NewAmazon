@@ -22,7 +22,7 @@ public class ProductInOrdination {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)//targetEntity = Ordination.class)
     @JoinColumn(name="related_ordination")
     @JsonIgnore
     @ToString.Exclude

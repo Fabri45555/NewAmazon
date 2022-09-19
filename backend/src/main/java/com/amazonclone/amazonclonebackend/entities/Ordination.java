@@ -31,7 +31,7 @@ public class Ordination implements Serializable{
     @Column(name = "ordination_timestamp")
     private Date ordinationTime;
 
-    @OneToMany(mappedBy = "ordination", cascade = CascadeType.MERGE)
+    @OneToMany(targetEntity = ProductInOrdination.class, mappedBy = "ordination", cascade = CascadeType.MERGE)
     private List<ProductInOrdination> productsInOrdination;
 
 }

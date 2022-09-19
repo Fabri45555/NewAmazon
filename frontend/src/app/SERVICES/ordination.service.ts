@@ -11,10 +11,10 @@ import { UpOrdination } from './up-ordination';
 export class OrdinationService {
 
   ordinations : Ordination[] = [];
-  ordination !: Ordination;
+//  ordination !: Ordination;
 
   orderUrl= 'http://localhost:8080/orders/';
-  httpOptions={headers: new HttpHeaders({'Content-Type' : 'application/json'})}
+  httpOptions={headers: new HttpHeaders({'Content-Type' : 'string|string[]'})}
 
   constructor(private Http : HttpClient) { }
 
@@ -31,7 +31,7 @@ export class OrdinationService {
   }
 
   public updateOrder(ordination:UpOrdination): Observable<Ordination>{
-    return this.Http.put<Ordination>(this.orderUrl+'update',ordination);
+    return this.Http.put<Ordination>(this.orderUrl+'update',this.httpOptions);
   }
 
   public getOrderInPeriod(startDate:Data, endDate:Data): Observable<Ordination>{

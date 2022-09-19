@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { LoginComponent } from './../Pages/login/login.component';
 import { OAuthService, AuthConfig, NullValidationHandler } from 'angular-oauth2-oidc';
 import { Injectable, Input } from '@angular/core';
@@ -15,7 +16,7 @@ export class LoginService {
   isAdmin:boolean =false;
 
 
-  constructor(private oauthService: OAuthService) {
+  constructor(private oauthService: OAuthService,private router:Router) {
   }
 
   alert(){
@@ -23,8 +24,9 @@ export class LoginService {
    }
 
   public login(): void{
-    this.oauthService.initImplicitFlowInternal();
+      this.oauthService.initImplicitFlowInternal();
   }
+
 
   public logout(): void{
     this.oauthService.logOut();

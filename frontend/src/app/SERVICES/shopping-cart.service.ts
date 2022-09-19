@@ -1,3 +1,4 @@
+import { ProductService } from './product.service';
 import { FormControlName } from '@angular/forms';
 
 import { Injectable, Output, EventEmitter } from '@angular/core';
@@ -6,6 +7,8 @@ import { Product } from '../Components/products/product';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { UpProduct } from '../Components/products/UpProduct';
 import { Observable } from 'rxjs/internal/Observable';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +19,33 @@ export class ShoppingCartService {
   id?:string;
   productURL= 'http://localhost:8080/products/';
   httpOptions = {headers: new HttpHeaders({'Content-Type' : 'application/json'})}
-  lunghezza:number=0;
   products_id: Map<string,number> = new Map<string,number>();
+ // productsValue : Product[] = [];
+  values : number[] = [];
+  quantita !:number;
   @Output()
   deleteEvent: EventEmitter<any> = new EventEmitter()
 
 
-  constructor(private Http : HttpClient) { }
+  constructor(private Http : HttpClient) {}
 
 
   public updateProducts(product: UpProduct): Observable<Product>{
     return this.Http.put<Product>(this.productURL+'update', product);
+  }
+
+  indice(id:string):number{
+    let ret = -1;
+    let products=this.getShoppingCartItems()
+    for (let i = 0; i < products.length; i++) {
+      const idCorr =this.getProductId(products[i]);
+     // console.log(id==idCorr)
+      if(id == idCorr){
+          ret =  i;
+        }
+      }
+    return ret;
+
   }
 
   contains(items: Product[], product: Product) : boolean{
@@ -44,26 +63,35 @@ export class ShoppingCartService {
 
   addProduct = (product: Product)=> {
     let items = this.getShoppingCartItems();
-  //console.log(items)
-  //console.log(this.contains(items,product))
+    let values = this.getProductsValue();
+    let ind = this.indice(this.getProductId(product));
     if(this.contains(items,product)){ // se esistono items
-      this.lunghezza++;
-      console.log(this.products_id);
+       let currVal = values[ind]
+        console.log(currVal)
+        currVal++;
+        values[ind]=currVal;
       localStorage.setItem('shopping_cart', JSON.stringify(items))
+      localStorage.setItem('values', JSON.stringify(values))
     }else if(!this.contains(items,product))
     {
-      console.log(this.products_id);
-      this.lunghezza++;
-      items.push(product);
+    items.push(product);
+   //   console.log(ind)
+     values.push(1)
+  //    this.productsValue.push(product);
       localStorage.setItem('shopping_cart', JSON.stringify(items))
+      localStorage.setItem('values', JSON.stringify(values))
     }
   }
 
   resetQuantity() : void{
-    for(const x of this.products_id.keys()){
-        console.log(x)
-        this.products_id.delete(x);
-    }
+    /*for(const x of this.productsValue){
+      console.log(x)
+        this.productsValue.pop();
+        this.values.pop();
+    }*/
+    let values = this.getProductsValue();
+    values.splice(0,values.length);
+    localStorage.setItem('values',JSON.stringify(values));
   }
 
   getShoppingCartItems = ()=> {
@@ -72,15 +100,32 @@ export class ShoppingCartService {
       return JSON.parse(items)
   }
 
-  getCartLength = ()=>{
-    return this.getShoppingCartItems().length;
+
+
+  getProductsValue = () =>{
+    let items = localStorage.getItem('values')
+    if(items)
+      return JSON.parse(items);
+  }
+
+  getCartLength():number{
+    let lunghezza=0;
+    const valori = this.getProductsValue();
+    for (let i = 0; i < valori.length; i++) {
+      lunghezza+=valori[i]
+    }
+    return lunghezza;
   }
 
   getTotal = ()=>{
     let items = this.getShoppingCartItems();
+    let values = this.getProductsValue();
     let tot = 0;
     for(let i=0; i<items.length; i++){
-      tot += items[i].price;
+      const valCorr = values[i];
+      for(let x=0; x<valCorr;x++){
+        tot += items[i].price;
+      }
     }
     return tot;
   }
@@ -88,64 +133,41 @@ export class ShoppingCartService {
   removerItem = (p: Product)=>{
     console.log('Rimuovendo il prodotto', p)
     let items = this.getShoppingCartItems();
+    let values=this.getProductsValue()
     const index = items.findIndex((item: { id: any; }) => item.id == p.id)
     if(index >= 0){
       items.splice(index, 1);
-      this.lunghezza--;
+      values.splice(index, 1);
+      localStorage.setItem('values', JSON.stringify(values))
       return localStorage.setItem('shopping_cart', JSON.stringify(items))
     }
   }
 
   removerAll = () =>{
     let items = this.getShoppingCartItems();
+  //let values = this.getProductsValue();
     items.splice(0, items.length);
     for (let i= 0; i < localStorage.length; i++) {
       localStorage.removeItem
     }
-    return localStorage.setItem('shopping_cart', JSON.stringify(items))
+    return localStorage.setItem('shopping_cart', JSON.stringify(items));
+ //   localStorage.setItem('values',JSON.stringify(values));
   }
 
-
-  addQuantity(product:Product) : void{
-    let id =this.getProductId(product);
-    console.log()
-    if(this.products_id.has(id)){
-        let x = this.products_id.get(id);
-        //console.log(x)
-        if(x){
-            x++;
-            this.products_id.set(id,x);
-          }
-          else{
-            this.products_id.set(id,1);
-          }
-        }
-    else if(!this.products_id.has(id)){
-        this.products_id.set(id,1);
-    }
-  }
 
   decrQuantity(product:Product) : void{
     let products = this.getShoppingCartItems();
     const index = products.findIndex((item: {id: any;}) => item.id == product.id )
-    let ret ="";
-    this.lunghezza--;
     if(index >=0)
       {
-        const x = JSON.stringify(product);
-        const id = x.split('id')[1];
-        ret = id.substring(2,id.indexOf(","));
-        if(this.products_id.has(ret)){
-          let x = this.products_id.get(ret);
-          console.log(x)
-          if(x){
-              x--;
-              this.products_id.set(ret,x);
-          }
-        }
-        else{
-          this.removerItem(product);
-          this.deleteEvent.emit(product)
+        let a = this.getShoppingCartItems();
+        let b = this.getProductsValue();
+        let ind = this.indice(this.getProductId(product));
+        let currVal = b[ind];
+        if(this.contains(a,product) && currVal>1 ){
+          currVal--;
+          b[ind] = currVal;
+          localStorage.setItem('values',JSON.stringify(b))
         }
       }
   }
@@ -166,14 +188,16 @@ export class ShoppingCartService {
 
   getQuantity(product:Product): number{
     let ret;
-    let id = this.getProductId(product);
+    let values = this.getProductsValue();
   //console.log(id)
-    if(this.products_id.has(id)){
-      ret=this.products_id.get(id);
-    }
+    let ind = this.indice(this.getProductId(product));
+    ret = values[ind];
   //console.log(ret)
-    if(ret)
+    if(ret){
+      this.quantita=ret;
       return ret;
+    }
+    this.quantita=0;
     return 0
   }
 
