@@ -10,10 +10,11 @@ import com.amazonclone.amazonclonebackend.repositories.OrderRepository;
 import com.amazonclone.amazonclonebackend.repositories.ProductInOrdinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,30 +26,16 @@ public class OrderService {
     private  OrderRepository orderRepository;
 
     @Autowired
-    private ProductInOrdinationRepository productInOrdinationRepository;
+    private  ProductInOrdinationRepository productInOrdinationRepository;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private  EntityManager entityManager;
 
-    @Transactional
-    public Ordination addOrder(Ordination ordination) throws QuantityProductUnavailableException {
+
+
+    @Transactional(readOnly = false)
+    public Ordination addOrder(Ordination ordination) {
         Ordination result = orderRepository.save(ordination);
-        if(result.getProductsInOrdination()!=null) {
-            for (ProductInOrdination pio : result.getProductsInOrdination()) {
-                pio.setOrdination(result);
-                ProductInOrdination justAdded = productInOrdinationRepository.save(pio);
-            //    entityManager.refresh(justAdded);
-                Product product = justAdded.getProduct();
-                int newQuantity = product.getQuantity() - pio.getQuantity();
-                if (newQuantity < 0) {
-                    throw new QuantityProductUnavailableException();
-                }
-                product.setQuantity(newQuantity);
-              //  entityManager.refresh(pio);
-
-            }
-        }
-     //   entityManager.refresh(result);
         return result;
     }
 
@@ -73,8 +60,16 @@ public class OrderService {
         return orderRepository.findInPeriod(startDate, endDate);
     }
 
-    public void deleteOrderById(Long id)
-    {
+    public void deleteOrderById(Long id){
+        List<Ordination> x = findAllOrder();
+        for(int i=0;i<x.size();i++){
+            if(x.get(i).getId().equals(id)) {
+                List<ProductInOrdination> p = x.get(i).getProductsInOrdination();
+                for(int j=0;j<p.size();j++){
+                    productInOrdinationRepository.deleteById(p.get(j).getId());
+                }
+            }
+        }
         orderRepository.deleteById(id);
     }//deleteOrderById
 

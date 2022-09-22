@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Ordination } from './ordination';
 import { Injectable } from '@angular/core';
 import { Data } from '@angular/router';
 import { UpOrdination } from './up-ordination';
+import { Product } from '../Components/products/product';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,9 @@ export class OrdinationService {
   ordinations : Ordination[] = [];
 //  ordination !: Ordination;
 
+
   orderUrl= 'http://localhost:8080/orders/';
-  httpOptions={headers: new HttpHeaders({'Content-Type' : 'string|string[]'})}
+  httpOptions={headers: new HttpHeaders({'Content-Type' : 'application/json'})}
 
   constructor(private Http : HttpClient) { }
 
@@ -41,4 +43,9 @@ export class OrdinationService {
   public deleteOrder(orderId:number):Observable<void>{
     return this.Http.delete<any>(this.orderUrl+'delete/'+orderId,this.httpOptions);
   }
+
+
+ 
+
+
 }

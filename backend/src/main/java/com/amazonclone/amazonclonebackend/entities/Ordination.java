@@ -1,5 +1,7 @@
 package com.amazonclone.amazonclonebackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +25,7 @@ public class Ordination implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column( name="id")
-    private long id;
+    private Long id;
 
     @Basic
     @CreationTimestamp
@@ -31,7 +33,15 @@ public class Ordination implements Serializable{
     @Column(name = "ordination_timestamp")
     private Date ordinationTime;
 
+    @JsonManagedReference(value = "ordination")
     @OneToMany(targetEntity = ProductInOrdination.class, mappedBy = "ordination", cascade = CascadeType.MERGE)
+    @JsonIgnore
+    @ToString.Exclude
     private List<ProductInOrdination> productsInOrdination;
 
+    public Ordination getOrdinationWithId(Long id){
+        if(this.id == id)
+            return this;
+        return null;
+    }
 }

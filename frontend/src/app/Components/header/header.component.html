@@ -25,7 +25,7 @@
         </button>
       </span>
     </div>
-    <div class="header_menu_signin">
+    <div routerLink="/ordination" class="header_menu_signin" *ngIf="loginService.getIsLogged()">
       <span class="header_menu_top_item">Resi</span>
       <span class="header_menu_bottom_item">e ordini</span>
     </div>

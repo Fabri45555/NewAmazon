@@ -1,4 +1,6 @@
 
+import { OrdinationComponent } from './Pages/ordination/ordination.component';
+
 import { UpdateComponent } from './Products/update/update.component';
 import { AddComponent } from './Products/add/add.component';
 import { NgModule } from '@angular/core';
@@ -13,6 +15,7 @@ const routes: Routes = [
   {path:'add',component:AddComponent},
   {path:'update',component:UpdateComponent},
   {path:'checkout', component: CheckoutComponent},
+  {path:'ordination', component: OrdinationComponent},
   {path:'**', redirectTo:'', pathMatch:'full'}
 ];
 

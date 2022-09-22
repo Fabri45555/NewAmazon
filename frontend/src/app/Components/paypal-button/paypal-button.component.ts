@@ -1,9 +1,14 @@
+import { ProductService } from './../../SERVICES/product.service';
+import { ProductInOrdinationService } from './../../SERVICES/product-in-ordination.service';
+import { UpProduct } from './../products/UpProduct';
 import { OrdinationService } from './../../SERVICES/ordination.service';
 import { Ordination } from './../../SERVICES/ordination';
 import { ProductInOridination } from './../../SERVICES/product-in-oridination';
 import { ShoppingCartService } from './../../SERVICES/shopping-cart.service';
 import { Component, OnInit } from '@angular/core';
 import { render } from 'creditcardpayments/creditCardPayments';
+import { Product } from '../products/product';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -19,8 +24,9 @@ export class PaypalButtonComponent implements OnInit {
   empty : ProductInOridination[] = []
   ordination !: Ordination;
   newOrdination!:Ordination;
+  ciao!:Ordination;
 
-  constructor(private shopping_cart:ShoppingCartService, private ordinationService:OrdinationService) {
+  constructor(private shopping_cart:ShoppingCartService,private productService : ProductService, private ordinationService:OrdinationService,private productInOrdinationService:ProductInOrdinationService) {
     render(
       {
         id: "#myPaypalButtons",
@@ -30,6 +36,7 @@ export class PaypalButtonComponent implements OnInit {
           this.data = details;
           alert("Transazione avvenuta con successo!");
           this.addOrder();
+          this.setProductInOrdination();
         }
       }
     );
@@ -60,28 +67,44 @@ export class PaypalButtonComponent implements OnInit {
   addOrder() : void{
     if(this.getTransactionResult())
     {
-      this.ordination = new Ordination(null,new Date(this.getData()),this.productsInOrdination);
-      console.log(this.ordination)
+      this.ordination = new Ordination(null,new Date(this.getData()),this.empty);
       for (let i = 0; i < this.shopping_cart.getShoppingCartItems().length; i++) {
-        const product = this.shopping_cart.getShoppingCartItems()[i];
-        console.log(product)
-        let productInOrdination = new ProductInOridination(null,this.shopping_cart.getQuantity(product),product)
-     //   product = product.quantity -this.shopping_cart.getQuantity(product);
+        let product = this.shopping_cart.getShoppingCartItems()[i];
+        let productInOrdination = new ProductInOridination(null,this.shopping_cart.getQuantity(product),this.ordination,product);
+        this.productInOrdinationService.addProductsInOrdination(productInOrdination).subscribe(
+          data=>{},
+          err=>console.log(err));
+        let newP = new UpProduct(product.id,product.name,product.desc,product.price,product.quantity-this.shopping_cart.getQuantity(product),product.barcode,product.imageUrl,product.ratings);
+        this.productService.updateProducts(newP).subscribe(
+          data=>{},
+          err=>console.log(err)
+        );
         this.productsInOrdination.push(productInOrdination);
-        console.log(this.productsInOrdination)
       }
-      this.newOrdination = new Ordination(null,new Date(this.getData()),this.productsInOrdination);
-      console.log(this.newOrdination);
+      this.ordination.productsInOrdination = this.productsInOrdination;
+      console.log(this.ordination)
+      this.ordinationService.addOrders(this.ordination).subscribe(
+        data=>{console.log(data)},
+        err=>console.log(err)
+      );
       this.shopping_cart.removerAll();
       this.shopping_cart.resetQuantity();
-      this.ordinationService.addOrders(this.newOrdination).subscribe(
-        data => {
-          console.log(data);
-        },
-        err => (console.log(err))
-      );
-    }else{return}
+    }
   }
+
+
+
+    setProductInOrdination():void{
+      if(this.getTransactionResult()){
+        for (let i = 0; i < this.productsInOrdination.length; i++){
+          const element = this.productsInOrdination[i];
+          console.log(element);
+          this.productInOrdinationService.setProduct(element.product);
+          this.productInOrdinationService.setQuantity(element.quantity);
+        }
+      }
+    }
+
 
   ngOnInit(): void {
   }

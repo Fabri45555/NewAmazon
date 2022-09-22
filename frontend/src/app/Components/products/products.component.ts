@@ -73,7 +73,6 @@ export class ProductsComponent implements OnInit {
       },
       err => console.log(err)
     );
-
   }
 
   back(): void{
@@ -101,7 +100,7 @@ export class ProductsComponent implements OnInit {
     }
    }
 
-   
+
 
 }
 

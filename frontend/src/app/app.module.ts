@@ -27,6 +27,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddComponent } from './Products/add/add.component';
 import { UpdateComponent } from './Products/update/update.component';
 import { PaypalButtonComponent } from './Components/paypal-button/paypal-button.component';
+import { OrdinationComponent } from './Pages/ordination/ordination.component';
+
 
 
 @NgModule({
@@ -43,7 +45,9 @@ import { PaypalButtonComponent } from './Components/paypal-button/paypal-button.
     CheckoutSubtotalComponent,
     AddComponent,
     UpdateComponent,
-    PaypalButtonComponent
+    PaypalButtonComponent,
+    OrdinationComponent,
+  
   ],
   imports: [
     BrowserModule,

@@ -17,7 +17,6 @@ export class ProductService {
 
   productURL= 'http://localhost:8080/products/';
   httpOptions = {headers: new HttpHeaders({'Content-Type' : 'application/json'})}
-  private apiServiceUrl = environment.apiBaseUrl;
   constructor(private Http: HttpClient) { }
 
   public getProducts(): Observable<Product[]>{
@@ -98,6 +97,22 @@ export class ProductService {
       }
 
       this.name = ret;
+  }
+
+  getProductN(product:Product) : string{
+    let products = this.getProdotti();
+    const index = products.findIndex((item: {id: any;}) => item.id == product.id )
+    let f=""
+    let ret ="";
+    if(index >=0)
+      {
+        const x = JSON.stringify(product);
+        const id = x.split('name')[1];
+        f = id.substring(2,id.indexOf(','));
+        ret=f.substring(1,f.length-1);
+      }
+
+      return ret;
   }
   getProductDesc(product:Product) : void{
     let products = this.getProdotti();
@@ -187,6 +202,23 @@ export class ProductService {
       }
       this.imageUrl = ret;
   }
+
+  getProductIm(product:Product) : string{
+    let products = this.getProdotti();
+    const index = products.findIndex((item: {id: any;}) => item.id == product.id )
+    let f="";
+    let ret ="";
+    if(index >=0)
+      {
+        const x = JSON.stringify(product);
+        const id = x.split('imageUrl')[1];
+        f = id.substring(2,id.indexOf(','));
+        console.log(f)
+        ret = f.substring(1,f.length-1);
+      }
+      return ret;
+  }
+
   getProductRatings(product:Product) : void{
     let products = this.getProdotti();
     const index = products.findIndex((item: {id: any;}) => item.id == product.id )

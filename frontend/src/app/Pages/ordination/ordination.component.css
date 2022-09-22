@@ -1,0 +1,60 @@
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 80px;
+  justify-content: center;
+}
+
+
+mat-card{
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  width: 300px;
+  margin: 20px;
+  align-items: center;
+}
+
+.ord > mat-card > img{
+  object-fit: contain;
+  height: 100px;
+}
+
+label{
+  margin-top: 18px;
+  font-size: 18px;
+}
+
+
+.update_logo{
+  object-fit: contain;
+  width: 120px;
+}
+
+.btn1{
+  color: black;
+  background-color: #f0c14b;
+  border: 1px solid;
+  border-color: #a88134 #9c7e31 #846a29;
+  border-radius: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.button2{
+  padding-bottom:100% ;
+  margin-right: 100px;
+  padding-top: 15px;
+}
+
+.button21{
+  padding-bottom:100% ;
+  margin-right: 100px;
+  padding-top: 15px;
+  margin-top: 100%;
+}
+
+
+.btn2{
+  color: black;
+}

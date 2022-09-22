@@ -1,0 +1,38 @@
+<div class="container">
+
+    <div class="col-md4 mx-auto" *ngIf="!(this.lunghezza==0)">
+        <img class="update_logo" src="https://www.bitrefill.com/content/cn/b_rgb%3AFFFFFF%2Cc_pad%2Ch_720%2Cw_1280/v1569493391/amazon_it.jpg" >
+        <label style="display: flex; flex-direction:column; margin-bottom: 35px;" for="productInOrdination"><strong>Prodotti in Ordinazione</strong></label>
+        <div class="form-group" >
+          <div *ngFor="let product of products">
+          <div *ngIf="checkData(this.orders[products.indexOf(product)].ordinationTime)">
+          <mat-card>
+            <p style="text-align: center;"><strong>Ordine</strong></p>
+            <p><strong>Data</strong>: {{data(this.orders[products.indexOf(product)].ordinationTime)}} e <strong>Ora</strong>:{{ora(this.orders[products.indexOf(product)].ordinationTime)}}</p>
+            <p><strong>Prodotto</strong>: {{product.name}}</p>
+            <p><strong>Quantità</strong>:{{this.quantity[products.indexOf(product)]}}</p>
+            <img style="object-fit: contain; height: 100px;" src = {{product.imageUrl}}>
+            <button (click)="alert(product)"  mat-fab style="margin-top: 50px;background-color: red; "color="black">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card>
+        </div>
+        </div>
+        </div>
+          <div class="button2">
+          <a type="button" class="btn2" (click)="back()">
+          << Torna indietro</a>
+          </div>
+          </div>
+
+<div class="empty" *ngIf="this.lunghezza==0">
+  <h1><strong>Nessun Ordine Effettuato!</strong></h1>
+  <div class="button21">
+    <a type="button" class="btn2" (click)="back()">
+    << Torna indietro</a>
+    </div>
+</div>
+</div>
+
+
+
